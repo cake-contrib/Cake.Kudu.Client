@@ -1,0 +1,5 @@
+{
+    "Method":  "GET",
+    "Uri":  "/api/zip/site/wwwroot/",
+    "ResponseStatusCode": 200
+}

@@ -1,0 +1,5 @@
+{
+    "Method":  "GET",
+    "Uri":  "/api/vfs/SystemDrive/Program%20Files%20(x86)/SiteExtensions/Kudu/",
+    "ResponseContentType": "application/json"
+}

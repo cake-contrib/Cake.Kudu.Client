@@ -1,0 +1,5 @@
+{
+    "Method":  "PUT",
+    "Uri":  "/api/zip/site/wwwroot/ZipUploadStream/",
+    "ResponseStatusCode": 200
+}

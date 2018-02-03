@@ -1,0 +1,5 @@
+{
+    "Method":  "PUT",
+    "Uri":  "/api/vfs/site/wwwroot/images/",
+    "ResponseStatusCode": 201
+}
