@@ -1,0 +1,5 @@
+{
+    "Method":  "DELETE",
+    "Uri":  "/api/vfs/site/wwwroot/bin/",
+    "ResponseStatusCode": 200
+}

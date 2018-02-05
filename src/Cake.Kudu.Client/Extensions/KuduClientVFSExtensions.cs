@@ -172,11 +172,32 @@ namespace Cake.Kudu.Client.Extensions
         /// Deletes remote file.
         /// </summary>
         /// <param name="client">The Kudu client.</param>
-        /// <param name="remotePath">The remote source path.</param>
+        /// <param name="remotePath">The remote target path.</param>
         // ReSharper disable once InconsistentNaming
-        public static void VFSDelete(
+        public static void VFSDeleteFile(
             this IKuduClient client,
             FilePath remotePath)
+        {
+            client.VFSDelete(remotePath);
+        }
+
+        /// <summary>
+        /// Deletes remote directory.
+        /// </summary>
+        /// <param name="client">The Kudu client.</param>
+        /// <param name="remotePath">The remote target path.</param>
+        // ReSharper disable once InconsistentNaming
+        public static void VFSDeleteDirectory(
+            this IKuduClient client,
+            DirectoryPath remotePath)
+        {
+            client.VFSDelete(remotePath);
+        }
+
+        // ReSharper disable once InconsistentNaming
+        private static void VFSDelete(
+            this IKuduClient client,
+            Core.IO.Path remotePath)
         {
             if (client == null)
             {

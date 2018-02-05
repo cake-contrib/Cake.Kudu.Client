@@ -141,12 +141,22 @@ Task("Cake.Kudu.Client.Extensions.KuduClientVFSExtensions.VFSCreateDirectory")
     kuduClient.VFSCreateDirectory(remotePath);
 });
 
-Task("Cake.Kudu.Client.Extensions.KuduClientVFSExtensions.VFSDelete")
+Task("Cake.Kudu.Client.Extensions.KuduClientVFSExtensions.VFSDeleteFile")
     .Test( ()=>
 {
     // Given
     FilePath remotePath = "/site/wwwroot/LICENSE";
 
     // When
-    kuduClient.VFSDelete(remotePath);
+    kuduClient.VFSDeleteFile(remotePath);
+});
+
+Task("Cake.Kudu.Client.Extensions.KuduClientVFSExtensions.VFSDeleteDirectory")
+    .Test( ()=>
+{
+    // Given
+    DirectoryPath remotePath = "/site/wwwroot/bin/";
+
+    // When
+    kuduClient.VFSDeleteDirectory(remotePath);
 });
