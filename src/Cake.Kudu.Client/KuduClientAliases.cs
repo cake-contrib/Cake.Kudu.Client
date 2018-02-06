@@ -23,6 +23,20 @@ namespace Cake.Kudu.Client
         /// <param name="userName">The user name used to authenticate agains Kudu api.</param>
         /// <param name="password">The password used to authenticate agains Kudu api.</param>
         /// <returns>A new instance of a <see ref="IKuduClient"/>.</returns>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Client")]
         public static IKuduClient KuduClient(
@@ -44,6 +58,24 @@ namespace Cake.Kudu.Client
         /// <param name="context">The context.</param>
         /// <param name="settings">The settings.</param>
         /// <returns>A new instance of a <see ref="IKuduClient"/>.</returns>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     new KuduClientSettings(
+        ///         baseUri,
+        ///        userName,
+        ///        password
+        ///    ){
+        ///        Timeout = TimeSpan.FromSeconds(120)
+        ///        });
+        /// </code>
+        /// </example>
         [CakeMethodAlias]
         [CakeAliasCategory("Client")]
         public static IKuduClient KuduClient(

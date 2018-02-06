@@ -19,7 +19,25 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="client">The Kudu client.</param>
         /// <param name="remotePath">The remote source path.</param>
         /// <param name="localPath">The local target path.</param>
-        // ReSharper disable once InconsistentNaming
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// DirectoryPath remoteDirectoryPath = "/site/wwwroot/";
+        /// FilePath localFilePath = "./wwwroot.zip";
+        ///
+        /// kuduClient.ZipDownloadFile(remoteDirectoryPath, localFilePath);
+        /// </code>
+        /// </example>
         public static void ZipDownloadFile(
             this IKuduClient client,
             DirectoryPath remotePath,
@@ -34,7 +52,26 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="client">The Kudu client.</param>
         /// <param name="remotePath">The remote source path.</param>
         /// <returns>Content as <see cref="Stream"/></returns>
-        // ReSharper disable once InconsistentNaming
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// DirectoryPath remoteDirectoryPath = "/site/wwwroot/assets/";
+        ///
+        /// Stream resultStream = kuduClient.ZipDownloadStream(remoteDirectoryPath);
+        ///
+        /// Information("Result length: {0}", resultStream.Length);
+        /// </code>
+        /// </example>
         public static Stream ZipDownloadStream(
             this IKuduClient client,
             DirectoryPath remotePath)
@@ -48,6 +85,30 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="client">The Kudu client.</param>
         /// <param name="localPath">The local source file path.</param>
         /// <param name="remotePath">The remote target directory path.</param>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// DirectoryPath sourceDirectoryPath = "./Documentation/";
+        /// DirectoryPath remoteDirectoryPath = "/site/wwwroot/docs/";
+        /// FilePath zipFilePath = "./Documentation.zip";
+        ///
+        /// Zip(sourceDirectoryPath, zipFilePath);
+        ///
+        /// kuduClient.ZipUploadFile(
+        ///    zipFilePath,
+        ///    remoteDirectoryPath);
+        /// </code>
+        /// </example>
         public static void ZipUploadFile(
             this IKuduClient client,
             FilePath localPath,
@@ -62,6 +123,33 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="client">The Kudu client.</param>
         /// <param name="sourceStream">The source stream.</param>
         /// <param name="remotePath">The remote directory path.</param>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// DirectoryPath sourceDirectoryPath = "./Documentation/";
+        /// DirectoryPath remoteDirectoryPath = "/site/wwwroot/docs/";
+        /// FilePath zipFilePath = "./Documentation.zip";
+        ///
+        /// Zip(sourceDirectoryPath, zipFilePath);
+        ///
+        /// using(Stream sourceStream = kuduClient.FileSystem.GetFile(zipFilePath).OpenRead())
+        /// {
+        ///     kuduClient.ZipUploadStream(
+        ///        sourceStream,
+        ///        remoteDirectoryPath);
+        /// }
+        /// </code>
+        /// </example>
         public static void ZipUploadStream(
             this IKuduClient client,
             Stream sourceStream,
@@ -78,6 +166,28 @@ namespace Cake.Kudu.Client.Extensions
         /// </summary>
         /// <param name="client">The Kudu client.</param>
         /// <param name="localPath">The local source file path.</param>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// DirectoryPath sourceDirectoryPath = "./Documentation/";
+        /// FilePath zipFilePath = "./Documentation.zip";
+        ///
+        /// Zip(sourceDirectoryPath, zipFilePath);
+        ///
+        /// kuduClient.ZipDeployFile(
+        ///    zipFilePath);
+        /// </code>
+        /// </example>
         public static void ZipDeployFile(
             this IKuduClient client,
             FilePath localPath)
@@ -108,6 +218,31 @@ namespace Cake.Kudu.Client.Extensions
         /// </summary>
         /// <param name="client">The Kudu client.</param>
         /// <param name="sourceStream">The source stream.</param>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// DirectoryPath sourceDirectoryPath = "./Documentation/";
+        /// FilePath zipFilePath = "./Documentation.zip";
+        ///
+        /// Zip(sourceDirectoryPath, zipFilePath);
+        ///
+        /// using(Stream sourceStream = kuduClient.FileSystem.GetFile(zipFilePath).OpenRead())
+        /// {
+        ///     kuduClient.ZipDeployStream(
+        ///        sourceStream);
+        /// }
+        /// </code>
+        /// </example>
         public static void ZipDeployStream(
             this IKuduClient client,
             Stream sourceStream)

@@ -21,6 +21,62 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="client">The Kudu client.</param>
         /// <param name="remotePath">The remote directory path.</param>
         /// <returns><see cref="IKuduVFS"/> instance containing remote directory and file paths.</returns>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// DirectoryPath remotePath = "/site/wwwroot";
+        ///
+        /// IKuduVFS kuduVFS = kuduClient.VFSList(remotePath);
+        ///
+        /// Information("Directories and files");
+        /// foreach(IKuduPath path in kuduVFS.Entries)
+        /// {
+        ///     Information(
+        ///         "Name: {0}, Size: {1}, Created: {2:yyyy-MM-dd HH:mm:ss}, Modified: {3:yyyy-MM-dd HH:mm:ss}, Mime: {4}",
+        ///         path.Name,
+        ///         path.Size,
+        ///         path.Created,
+        ///         path.Modified,
+        ///         path.Mime);
+        /// }
+        ///
+        /// Information("Directories");
+        /// foreach(IKuduDirectoryPath directoryPath in kuduVFS.Directories)
+        /// {
+        ///     Information(
+        ///         "Directory: {0}, Size: {1}, Created: {2:yyyy-MM-dd HH:mm:ss}, Modified: {3:yyyy-MM-dd HH:mm:ss}, Mime: {4}, Path: {5}",
+        ///         directoryPath.Name,
+        ///         directoryPath.Size,
+        ///         directoryPath.Created,
+        ///         directoryPath.Modified,
+        ///         directoryPath.Mime,
+        ///         directoryPath.Path);
+        /// }
+        ///
+        /// Information("Files");
+        /// foreach(IKuduFilePath filePath in kuduVFS.Files)
+        /// {
+        ///     Information(
+        ///         "File: {0}, Size: {1}, Created: {2:yyyy-MM-dd HH:mm:ss}, Modified: {3:yyyy-MM-dd HH:mm:ss}, Mime: {4}, Path: {5}",
+        ///         filePath.Name,
+        ///         filePath.Size,
+        ///         filePath.Created,
+        ///         filePath.Modified,
+        ///         filePath.Mime,
+        ///         filePath.Path);
+        /// }
+        /// </code>
+        /// </example>
         // ReSharper disable once InconsistentNaming
         public static IKuduVFS VFSList(
             this IKuduClient client,
@@ -48,6 +104,26 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="client">The Kudu client.</param>
         /// <param name="remotePath">The remote source path.</param>
         /// <param name="localPath">The local target path.</param>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// FilePath remoteFilePath = "/site/wwwroot/hello.txt";
+        ///
+        /// FilePath localFilePath = "./hello.txt";
+        ///
+        /// kuduClient.VFSDownloadFile(remoteFilePath, localFilePath);
+        /// </code>
+        /// </example>
         // ReSharper disable once InconsistentNaming
         public static void VFSDownloadFile(
             this IKuduClient client,
@@ -63,6 +139,26 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="client">The Kudu client.</param>
         /// <param name="remotePath">The remote source path.</param>
         /// <returns>Content as <see cref="Stream"/></returns>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// FilePath remoteFilePath = "/site/wwwroot/hello.txt";
+        ///
+        /// Stream resultStream = kuduClient.VFSDownloadStream(remoteFilePath);
+        ///
+        /// Information("Result length: {0}", resultStream.Length);
+        /// </code>
+        /// </example>
         // ReSharper disable once InconsistentNaming
         public static Stream VFSDownloadStream(
             this IKuduClient client,
@@ -78,6 +174,26 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="remotePath">The remote source path.</param>
         /// <param name="encoding">The text encoding.</param>
         /// <returns>Content as string.</returns>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// FilePath remoteFilePath = "/site/wwwroot/hello.txt";
+        ///
+        /// string resultString = kuduClient.VFSDownloadString(remoteFilePath);
+        ///
+        /// Information("Result: {0}", resultString);
+        /// </code>
+        /// </example>
         // ReSharper disable once InconsistentNaming
         public static string VFSDownloadString(
             this IKuduClient client,
@@ -96,6 +212,26 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="client">The Kudu client.</param>
         /// <param name="localPath">The local source file path.</param>
         /// <param name="remotePath">The remote target file path.</param>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// FilePath remoteFilePath = "/site/wwwroot/hello.txt";
+        ///
+        /// FilePath localFilePath = "./hello.txt";
+        ///
+        /// kuduClient.VFSUploadFile(localFilePath, remoteFilePath);
+        /// </code>
+        /// </example>
         // ReSharper disable once InconsistentNaming
         public static void VFSUploadFile(
             this IKuduClient client,
@@ -111,6 +247,29 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="client">The Kudu client.</param>
         /// <param name="sourceStream">The source stream.</param>
         /// <param name="remotePath">The remote target file path.</param>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// FilePath remoteFilePath = "/site/wwwroot/hello.txt";
+        ///
+        /// FilePath localFilePath = "./hello.txt";
+        ///
+        /// using(Stream sourceStream = kuduClient.FileSystem.GetFile(localFilePath).OpenRead())
+        /// {
+        ///     kuduClient.VFSUploadStream(sourceStream, remoteFilePath);
+        /// }
+        /// </code>
+        /// </example>
         // ReSharper disable once InconsistentNaming
         public static void VFSUploadStream(
             this IKuduClient client,
@@ -127,6 +286,25 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="sourceString">The source string.</param>
         /// <param name="remotePath">The remote target file path.</param>
         /// <param name="encoding">The text encoding.</param>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// string sourceString = "Hello";
+        /// FilePath remoteFilePath = "/site/wwwroot/hello.txt";
+        ///
+        /// kuduClient.VFSUploadString(sourceString, remoteFilePath);
+        /// </code>
+        /// </example>
         // ReSharper disable once InconsistentNaming
         public static void VFSUploadString(
             this IKuduClient client,
@@ -160,6 +338,23 @@ namespace Cake.Kudu.Client.Extensions
         /// </summary>
         /// <param name="client">The Kudu client.</param>
         /// <param name="remotePath">The remote target path.</param>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// DirectoryPath remoteDirectoryPath = "/site/wwwroot/hello/";
+        /// kuduClient.VFSCreateDirectory(remoteDirectoryPath);
+        /// </code>
+        /// </example>
         // ReSharper disable once InconsistentNaming
         public static void VFSCreateDirectory(
             this IKuduClient client,
@@ -173,6 +368,23 @@ namespace Cake.Kudu.Client.Extensions
         /// </summary>
         /// <param name="client">The Kudu client.</param>
         /// <param name="remotePath">The remote target path.</param>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// FilePath remoteFilePath = "/site/wwwroot/hello.txt";
+        /// kuduClient.VFSDeleteFile(remoteFilePath);
+        /// </code>
+        /// </example>
         // ReSharper disable once InconsistentNaming
         public static void VFSDeleteFile(
             this IKuduClient client,
@@ -186,6 +398,24 @@ namespace Cake.Kudu.Client.Extensions
         /// </summary>
         /// <param name="client">The Kudu client.</param>
         /// <param name="remotePath">The remote target path.</param>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// DirectoryPath remoteDirectoryPath = "/site/wwwroot/hello/";
+        ///
+        /// kuduClient.VFSDeleteDirectory(remoteDirectoryPath);
+        /// </code>
+        /// </example>
         // ReSharper disable once InconsistentNaming
         public static void VFSDeleteDirectory(
             this IKuduClient client,

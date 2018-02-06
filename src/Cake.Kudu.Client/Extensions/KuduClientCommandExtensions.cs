@@ -22,6 +22,31 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="directory">The remote directory to execute command in.</param>
         /// <param name="arguments">The arguments.</param>
         /// <returns><see ref="KuduCommandResult"/></returns>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// IKuduCommandResult commandResult = kuduClient.ExecuteCommand(
+        ///     "echo",
+        ///     "D:/home/site/wwwroot",
+        ///     "hello");
+        ///
+        /// Information(
+        ///     "Output:\r\n{0}\r\nError:\r\n{1}\r\nExitCode: {2}",
+        ///     commandResult.Output,
+        ///     commandResult.Error,
+        ///     commandResult.ExitCode);
+        /// </code>
+        /// </example>
         public static IKuduCommandResult ExecuteCommand(
             this IKuduClient client,
             string command,
