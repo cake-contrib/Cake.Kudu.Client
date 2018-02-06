@@ -170,6 +170,7 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="client">The Kudu client.</param>
         /// <param name="localPath">The local directory path.</param>
         /// <param name="remotePath">The remote directory path.</param>
+        /// <remarks>This will zip the folder in-memory.</remarks>
         /// <example>
         /// <code>
         /// #addin nuget:?package=Cake.Kudu.Client
@@ -183,12 +184,12 @@ namespace Cake.Kudu.Client.Extensions
         ///     userName,
         ///     password);
         ///
-        ///    DirectoryPath sourceDirectoryPath = "./Documentation/";
-        ///    DirectoryPath remoteDirectoryPath = "/site/wwwroot/docs/";
+        /// DirectoryPath sourceDirectoryPath = "./Documentation/";
+        /// DirectoryPath remoteDirectoryPath = "/site/wwwroot/docs/";
         ///
-        ///    kuduClient.ZipUploadDirectory(
-        ///        sourceDirectoryPath,
-        ///        remoteDirectoryPath);
+        /// kuduClient.ZipUploadDirectory(
+        ///     sourceDirectoryPath,
+        ///     remoteDirectoryPath);
         /// </code>
         /// </example>
         public static void ZipUploadDirectory(
@@ -325,10 +326,10 @@ namespace Cake.Kudu.Client.Extensions
         ///     userName,
         ///     password);
         ///
-        ///    DirectoryPath sourceDirectoryPath = "./Documentation/";
+        /// DirectoryPath sourceDirectoryPath = "./Documentation/";
         ///
-        ///    kuduClient.ZipDeployDirectory(
-        ///        sourceDirectoryPath);
+        /// kuduClient.ZipDeployDirectory(
+        ///     sourceDirectoryPath);
         /// </code>
         /// </example>
         public static void ZipDeployDirectory(
