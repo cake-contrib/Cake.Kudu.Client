@@ -30,6 +30,9 @@ Setup(ctx =>
     fakeFileSystem.GetFile("/testfile.txt").SetContent("dummy");
     expectZipFile = System.IO.File.ReadAllBytes(ctx.MakeAbsolute(ctx.File("./TestApiResources/ZipDownload/ZipDownload.Response")).FullPath);
     fakeFileSystem.CreateFile("/testfile.zip", expectZipFile);
+    fakeFileSystem.CreateDirectory("/testfolder/");
+    fakeFileSystem.GetFile("/testfolder/index.htm").SetContent("<html><body><h1>Hello!</h1></body></html>");
+    fakeFileSystem.GetFile("/testfolder/about.htm").SetContent("<html><body><h1>About us!</h1></body></html>");
 });
 
 RunTestTarget("Cake.Kudu.Client");

@@ -48,6 +48,17 @@ Task("Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipUploadFile")
     kuduClient.ZipUploadFile(localPath, remotePath);
 });
 
+Task("Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipUploadDirectory")
+    .Test( ()=>
+{
+    // Given
+    DirectoryPath localPath = "/testfolder/";
+    DirectoryPath remotePath = "/site/wwwroot/ZipUploadDirectory/";
+
+    // When
+    kuduClient.ZipUploadDirectory(localPath, remotePath);
+});
+
 Task("Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipDeployStream")
     .Test( ()=>
 {
@@ -66,4 +77,14 @@ Task("Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipDeployFile")
 
     // When
     kuduClient.ZipDeployFile(localPath);
+});
+
+Task("Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipDeployDirectory")
+    .Test( ()=>
+{
+    // Given
+    DirectoryPath localPath = "/testfolder/";
+
+    // When
+    kuduClient.ZipDeployDirectory(localPath);
 });

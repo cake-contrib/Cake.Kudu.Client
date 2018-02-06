@@ -1,5 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
+using System.Text;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Kudu.Client.Helpers;
 using Path = Cake.Core.IO.Path;
@@ -162,6 +165,26 @@ namespace Cake.Kudu.Client.Extensions
         }
 
         /// <summary>
+        /// Uploads zip stream and extracts to remote directory path.
+        /// </summary>
+        /// <param name="client">The Kudu client.</param>
+        /// <param name="localPath">The local directory path.</param>
+        /// <param name="remotePath">The remote directory path.</param>
+        public static void ZipUploadDirectory(
+            this IKuduClient client,
+            DirectoryPath localPath,
+            DirectoryPath remotePath)
+        {
+            client.ZipDirectoryToMemoryStream(
+                localPath,
+                sourceStream =>
+                    client.UploadStream(
+                        sourceStream,
+                        remotePath,
+                        EncodeZipPath));
+        }
+
+        /// <summary>
         /// Deploys zip file to Kudu wesite.
         /// </summary>
         /// <param name="client">The Kudu client.</param>
@@ -260,6 +283,89 @@ namespace Cake.Kudu.Client.Extensions
             client.HttpPostStream(
                 "/api/zipdeploy",
                 sourceStream);
+        }
+
+        /// <summary>
+        /// Deploy local directory to KuduWebsite
+        /// </summary>
+        /// <param name="client">The Kudu client.</param>
+        /// <param name="localPath">The local directory path.</param>
+        /// <remarks>This will zip the folder in-memory.</remarks>
+        public static void ZipDeployDirectory(
+            this IKuduClient client,
+            DirectoryPath localPath)
+        {
+            client.ZipDirectoryToMemoryStream(
+                localPath,
+                sourceStream =>
+                    client.HttpPostStream(
+                        "/api/zipdeploy",
+                        sourceStream));
+        }
+
+        private static void ZipDirectoryToMemoryStream(
+            this IKuduClient client,
+            DirectoryPath localPath,
+            Action<Stream> streamAction)
+        {
+            if (client == null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
+
+            if (localPath == null)
+            {
+                throw new ArgumentNullException(nameof(localPath));
+            }
+
+            if (streamAction == null)
+            {
+                throw new ArgumentNullException(nameof(streamAction));
+            }
+
+            var root = client.FileSystem.GetDirectory(localPath);
+            if (!root.Exists)
+            {
+                throw new DirectoryNotFoundException($"Specified directory not found: {localPath}.");
+            }
+
+            var outputStream = new MemoryStream();
+            var fileCount = 0;
+            long inSize = 0;
+
+            using (var archive = new ZipArchive(outputStream, ZipArchiveMode.Create, true, Encoding.UTF8))
+            {
+                client.Log.Verbose(
+                    "KuduClient: Zipping directory {0}...",
+                    localPath);
+                foreach (var file in root.GetFiles("*", SearchScope.Recursive))
+                {
+                    using (var inputStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        // Create the zip archive entry.
+                        var entryName = file.Path.FullPath.Substring(root.Path.FullPath.Length + 1);
+                        client.Log.Debug("KuduClient: Zipping file {0} to {1}", file.Path, entryName);
+                        var entry = archive.CreateEntry(entryName, CompressionLevel.Optimal);
+                        using (var entryStream = entry.Open())
+                        {
+                            // Copy the content of the input stream to the entry stream.
+                            inputStream.CopyTo(entryStream);
+                            fileCount++;
+                            inSize += file.Length;
+                        }
+                    }
+                }
+            }
+
+            client.Log.Verbose(
+                "KuduClient:  Done zipping directory {0} (Files: {1},  InBytes: {2}, OutBytes: {3})",
+                localPath,
+                fileCount,
+                inSize,
+                outputStream.Length);
+
+            outputStream.Position = 0;
+            streamAction(outputStream);
         }
 
         // ReSharper disable once SuggestBaseTypeForParameter
