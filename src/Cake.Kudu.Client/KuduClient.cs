@@ -64,6 +64,9 @@ namespace Cake.Kudu.Client
         public ICakeLog Log => Settings.Log ?? Context.Log;
 
         /// <inheritdoc />
+        public ICakeEnvironment Environment => Settings.Environment ?? Context.Environment;
+
+        /// <inheritdoc />
         public KuduClientSettings Settings { get; }
 
         /// <inheritdoc />

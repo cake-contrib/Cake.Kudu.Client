@@ -65,10 +65,17 @@ namespace Cake.Kudu.Client
         public IFileSystem FileSystem { get; set; }
 
         /// <summary>
-        /// Gets or sets the log used by kude client.
+        /// Gets or sets the log used by kudu client.
         /// </summary>
         /// <remarks>Defaults to <see cref="ICakeContext.Log"/>.</remarks>
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public ICakeLog Log { get; set; }
+
+        /// <summary>
+        /// Gets or sets the environment used by kudu client.
+        /// </summary>
+        /// <remarks>Defaults to <see cref="ICakeContext.Environment"/>.</remarks>
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
+        public ICakeEnvironment Environment { get; set; }
     }
 }

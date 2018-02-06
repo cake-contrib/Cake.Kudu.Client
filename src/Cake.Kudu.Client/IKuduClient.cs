@@ -1,4 +1,5 @@
 using System.Net.Http;
+using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 
@@ -19,6 +20,11 @@ namespace Cake.Kudu.Client
         /// Gets the Cake log.
         /// </summary>
         ICakeLog Log { get; }
+
+        /// <summary>
+        /// Gets the Cake environment.
+        /// </summary>
+        ICakeEnvironment Environment { get; }
 
         /// <summary>
         /// Gets the Kudu client settings.

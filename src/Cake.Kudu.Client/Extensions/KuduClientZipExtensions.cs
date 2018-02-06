@@ -170,6 +170,27 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="client">The Kudu client.</param>
         /// <param name="localPath">The local directory path.</param>
         /// <param name="remotePath">The remote directory path.</param>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        ///    DirectoryPath sourceDirectoryPath = "./Documentation/";
+        ///    DirectoryPath remoteDirectoryPath = "/site/wwwroot/docs/";
+        ///
+        ///    kuduClient.ZipUploadDirectory(
+        ///        sourceDirectoryPath,
+        ///        remoteDirectoryPath);
+        /// </code>
+        /// </example>
         public static void ZipUploadDirectory(
             this IKuduClient client,
             DirectoryPath localPath,
@@ -291,6 +312,25 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="client">The Kudu client.</param>
         /// <param name="localPath">The local directory path.</param>
         /// <remarks>This will zip the folder in-memory.</remarks>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        ///    DirectoryPath sourceDirectoryPath = "./Documentation/";
+        ///
+        ///    kuduClient.ZipDeployDirectory(
+        ///        sourceDirectoryPath);
+        /// </code>
+        /// </example>
         public static void ZipDeployDirectory(
             this IKuduClient client,
             DirectoryPath localPath)
@@ -324,14 +364,16 @@ namespace Cake.Kudu.Client.Extensions
             }
 
             var root = client.FileSystem.GetDirectory(localPath);
+            var rootPath = root.Path.MakeAbsolute(client.Environment);
             if (!root.Exists)
             {
-                throw new DirectoryNotFoundException($"Specified directory not found: {localPath}.");
+                throw new DirectoryNotFoundException($"Specified directory not found: {rootPath}.");
             }
 
             var outputStream = new MemoryStream();
             var fileCount = 0;
             long inSize = 0;
+            var rootPathLength = rootPath.FullPath.Length + 1;
 
             using (var archive = new ZipArchive(outputStream, ZipArchiveMode.Create, true, Encoding.UTF8))
             {
@@ -343,7 +385,7 @@ namespace Cake.Kudu.Client.Extensions
                     using (var inputStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
                         // Create the zip archive entry.
-                        var entryName = file.Path.FullPath.Substring(root.Path.FullPath.Length + 1);
+                        var entryName = file.Path.FullPath.Substring(rootPathLength);
                         client.Log.Debug("KuduClient: Zipping file {0} to {1}", file.Path, entryName);
                         var entry = archive.CreateEntry(entryName, CompressionLevel.Optimal);
                         using (var entryStream = entry.Open())

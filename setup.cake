@@ -80,21 +80,12 @@ Task("Docs-Generate")
     });
 }));
 
-Task("Docs-Package")
-    .IsDependentOn("Docs-Generate")
-    .Does(()=>
-{
-    Zip(
-        BuildParameters.Paths.Directories.PublishedDocumentation,
-        publishedDocumentationDeploymentZipFilePath);
-});
-
 string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
 
 Task("Docs-Kudu-Publish")
-    .IsDependentOn("Docs-Package")
+    .IsDependentOn("Docs-Generate")
     .WithCriteria(!string.IsNullOrEmpty(baseUri)
         && !string.IsNullOrEmpty(userName)
         && !string.IsNullOrEmpty(password)
@@ -105,14 +96,14 @@ Task("Docs-Kudu-Publish")
     try
     {
         Context.Log.Verbosity = Verbosity.Diagnostic;
-    
+
         IKuduClient kuduClient = KuduClient(
             baseUri,
             userName,
             password);
 
-        kuduClient.ZipDeployFile(
-            publishedDocumentationDeploymentZipFilePath);
+        kuduClient.ZipDeployDirectory(
+            BuildParameters.Paths.Directories.PublishedDocumentation);
     }
     finally
     {
