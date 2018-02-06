@@ -1,4 +1,5 @@
 #load nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Recipe&prerelease
+#addin nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Kudu.CLient&prerelease
 
 Environment.SetVariableNames();
 
@@ -53,4 +54,75 @@ BuildParameters.Tasks.DotNetCoreBuildTask.Does(() => {
 
         CopyBuildOutput();
     });
+
+
+FilePath publishedDocumentationDeploymentZipFilePath = $"{BuildParameters.Paths.Directories.PublishedDocumentation.FullPath}.zip";
+
+Task("Docs-Generate")
+    .IsDependentOn("Clean-Documentation")
+    .Does(() => RequireTool(WyamTool, () =>
+{
+    Wyam(new WyamSettings
+    {
+        Recipe = BuildParameters.WyamRecipe,
+        Theme = BuildParameters.WyamTheme,
+        OutputPath = MakeAbsolute(BuildParameters.Paths.Directories.PublishedDocumentation),
+        RootPath = BuildParameters.WyamRootDirectoryPath,
+        ConfigurationFile = BuildParameters.WyamConfigurationFile,
+        Settings = new Dictionary<string, object>
+        {
+            { "Host",  BuildParameters.WebHost },
+            { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
+            { "SourceFiles", BuildParameters.WyamSourceFiles },
+            { "Title", BuildParameters.Title },
+            { "IncludeGlobalNamespace", false }
+        }
+    });
+}));
+
+Task("Docs-Package")
+    .IsDependentOn("Docs-Generate")
+    .Does(()=>
+{
+    Zip(
+        BuildParameters.Paths.Directories.PublishedDocumentation,
+        publishedDocumentationDeploymentZipFilePath);
+});
+
+string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+
+Task("Docs-Kudu-Publish")
+    .IsDependentOn("Docs-Package")
+    .WithCriteria(!string.IsNullOrEmpty(baseUri)
+        && !string.IsNullOrEmpty(userName)
+        && !string.IsNullOrEmpty(password)
+    )
+    .Does(()=>
+{
+    var verbosity = Context.Log.Verbosity;
+    try
+    {
+        Context.Log.Verbosity = Verbosity.Diagnostic;
+    
+        IKuduClient kuduClient = KuduClient(
+            baseUri,
+            userName,
+            password);
+
+        kuduClient.ZipDeployFile(
+            publishedDocumentationDeploymentZipFilePath);
+    }
+    finally
+    {
+        Context.Log.Verbosity = verbosity;
+    }
+});
+
+// hook in and disable Git deploy
+BuildParameters.Tasks.DeployGraphDocumentation.IsDependentOn("Docs-Kudu-Publish");
+BuildParameters.Tasks.DeployGraphDocumentation.WithCriteria(() => false);
+BuildParameters.Tasks.PublishDocumentationTask.WithCriteria(() => false);
+
 Build.RunDotNetCore();
