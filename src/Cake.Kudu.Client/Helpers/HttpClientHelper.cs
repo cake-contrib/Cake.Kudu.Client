@@ -166,7 +166,13 @@ namespace Cake.Kudu.Client.Helpers
 
         private static TOut JsonResponseToObject<TOut>(HttpResponseMessage response)
         {
-            return LitJson.JsonMapper.ToObject<TOut>(response.Content.ReadAsStringAsync().Result);
+            var responseBody = response.StatusCode == HttpStatusCode.NoContent
+                ? null
+                : response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            return string.IsNullOrWhiteSpace(responseBody)
+                    ? default(TOut)
+                    : LitJson.JsonMapper.ToObject<TOut>(responseBody);
         }
 
         private static TOut ProcessHttpClientAction<TOut>(

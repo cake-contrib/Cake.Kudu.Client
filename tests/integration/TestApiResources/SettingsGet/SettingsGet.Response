@@ -1,0 +1,6 @@
+{
+    "deployment_branch": "master",
+    "SCM_GIT_USERNAME": "windowsazure",
+    "SCM_GIT_EMAIL": "windowsazure",
+    "WEBSITE_SITE_NAME": "KuduClient"
+}

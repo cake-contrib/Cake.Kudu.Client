@@ -1,0 +1,5 @@
+{
+    "Method":  "GET",
+    "Uri":  "/api/settings",
+    "ResponseContentType": "application/json"
+}
