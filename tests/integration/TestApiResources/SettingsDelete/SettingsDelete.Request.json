@@ -1,0 +1,5 @@
+{
+    "Method":  "DELETE",
+    "Uri":  "/api/settings/FOO",
+    "ResponseStatusCode": 204
+}
