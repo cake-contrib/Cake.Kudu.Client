@@ -344,10 +344,88 @@ namespace Cake.Kudu.Client.Extensions
                         sourceStream));
         }
 
+        /// <summary>
+        /// Deploy local directory to KuduWebsite as read only Zip file system
+        /// </summary>
+        /// <param name="client">The Kudu client.</param>
+        /// <param name="localPath">The local directory path.</param>
+        /// <returns>The path of deployed Zip.</returns>
+        /// <example>
+        /// <code>
+        /// #addin nuget:?package=Cake.Kudu.Client
+        ///
+        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
+        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
+        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
+        ///
+        /// IKuduClient kuduClient = KuduClient(
+        ///     baseUri,
+        ///     userName,
+        ///     password);
+        ///
+        /// FilePath deployFilePath = kuduClient.ZipRunFromDirectory(sourceDirectoryPath);
+        ///
+        /// Information("Deployed to {0}", deployFilePath);
+        /// </code>
+        /// </example>
+        public static FilePath ZipRunFromDirectory(
+            this IKuduClient client,
+            DirectoryPath localPath)
+        {
+            DirectoryPath sitePackagesPath = "d:/home/data/SitePackages";
+            FilePath
+                siteVersionPath = sitePackagesPath.CombineWithFilePath("siteversion.txt"),
+                deployFilePath = sitePackagesPath
+                                    .CombineWithFilePath(FormattableString.Invariant($"{DateTime.UtcNow:yyyyMMdd_HHmmss}_{Guid.NewGuid():N}.zip"));
+            string relativeDeployFilePath = deployFilePath.GetFilename().FullPath;
+
+            client.ZipDirectoryToMemoryStream(
+                localPath,
+                sourceStream => client.VFSUploadStream(
+                    sourceStream,
+                    deployFilePath),
+                archive =>
+                {
+                    var entry = archive.CreateEntry("KuduClientZipRunFromDirectoryVersion.txt", CompressionLevel.Optimal);
+                    using (var entryStream = entry.Open())
+                    {
+                        using (var sw = new StreamWriter(entryStream, Encoding.ASCII))
+                        {
+                            sw.Write(relativeDeployFilePath);
+                        }
+                    }
+                });
+
+            client.VFSUploadString(
+                relativeDeployFilePath,
+                siteVersionPath);
+
+            var commandResult = client.ExecuteCommand(
+                "powershell",
+                "site",
+                $"-Command \"$ProgressPreference = 'SilentlyContinue';Invoke-RestMethod https://%WEBSITE_HOSTNAME%/KuduClientZipRunFromDirectoryVersion.txt;exit $LastExitCode\"");
+
+            client.Log.Debug(
+                "Output:\r\n{0}\r\nError:\r\n{1}\r\nExitCode: {2}",
+                commandResult.Output,
+                commandResult.Error,
+                commandResult.ExitCode);
+
+            var commandOutput = commandResult.Output?.TrimEnd();
+
+            if (relativeDeployFilePath != commandOutput)
+            {
+                throw new Exception($"Deployment failed expected \"{relativeDeployFilePath}\" got \"{commandOutput}\"");
+            }
+
+            return deployFilePath;
+        }
+
         private static void ZipDirectoryToMemoryStream(
             this IKuduClient client,
             DirectoryPath localPath,
-            Action<Stream> streamAction)
+            Action<Stream> streamAction,
+            Action<ZipArchive> postZipAction = null)
         {
             if (client == null)
             {
@@ -398,6 +476,8 @@ namespace Cake.Kudu.Client.Extensions
                         }
                     }
                 }
+
+                postZipAction?.Invoke(archive);
             }
 
             client.Log.Verbose(
