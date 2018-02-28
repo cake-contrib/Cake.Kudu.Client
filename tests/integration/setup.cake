@@ -1,6 +1,6 @@
 var targets = new [] {
-    "net46",
-    "netstandard1.6"
+    "net461",
+    "netstandard2.0"
 };
 
 DirectoryPath rootPath = MakeAbsolute(Directory("./"));
