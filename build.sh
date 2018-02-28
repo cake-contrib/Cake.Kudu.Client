@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 # Define varibles
-CAKE_VERSION=0.25.0
+CAKE_VERSION=0.26.0
 DOTNET_SDK_VERSION=2.1.4
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 TOOLS_DIR=$SCRIPT_DIR/tools
 CAKE_EXE=$TOOLS_DIR/Cake.$CAKE_VERSION/Cake.exe
+
+# temp addin fix
+export CAKE_SETTINGS_SKIPVERIFICATION=true
 
 # Make sure the tools folder exist.
 if [ ! -d "$TOOLS_DIR" ]; then
