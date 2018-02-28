@@ -1,4 +1,4 @@
-#addin nuget:?package=Cake.Testing&version=0.25.0
+#addin nuget:?package=Cake.Testing&version=0.26.0
 #addin nuget:?package=xunit.assert&version=2.3.1
 
 using Cake.Testing;

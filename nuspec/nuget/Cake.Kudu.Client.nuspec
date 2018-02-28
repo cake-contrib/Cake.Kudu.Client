@@ -15,11 +15,11 @@
     <tags>Cake, Script, Build, Kudu</tags>
   </metadata>
   <files>
-    <file src="net46\Cake.Kudu.Client.dll" target="lib/net46" />
-    <file src="net46\Cake.Kudu.Client.pdb" target="lib/net46" />
-    <file src="net46\Cake.Kudu.Client.xml" target="lib/net46" />
-    <file src="netstandard1.6\Cake.Kudu.Client.dll" target="lib/netstandard1.6" />
-    <file src="netstandard1.6\Cake.Kudu.Client.pdb" target="lib/netstandard1.6" />
-    <file src="netstandard1.6\Cake.Kudu.Client.xml" target="lib/netstandard1.6" />
+    <file src="net461\Cake.Kudu.Client.dll" target="lib/net461" />
+    <file src="net461\Cake.Kudu.Client.pdb" target="lib/net461" />
+    <file src="net461\Cake.Kudu.Client.xml" target="lib/net461" />
+    <file src="netstandard2.0\Cake.Kudu.Client.dll" target="lib/netstandard2.0" />
+    <file src="netstandard2.0\Cake.Kudu.Client.pdb" target="lib/netstandard2.0" />
+    <file src="netstandard2.0\Cake.Kudu.Client.xml" target="lib/netstandard2.0" />
   </files>
 </package>
