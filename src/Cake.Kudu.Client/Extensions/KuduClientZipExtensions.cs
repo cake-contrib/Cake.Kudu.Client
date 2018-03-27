@@ -391,21 +391,7 @@ namespace Cake.Kudu.Client.Extensions
         /// <returns>The path of deployed Zip.</returns>
         /// <example>
         /// <code>
-        /// #addin nuget:?package=Cake.Kudu.Client
-        ///
-        /// string  baseUri     = EnvironmentVariable("KUDU_CLIENT_BASEURI"),
-        ///         userName    = EnvironmentVariable("KUDU_CLIENT_USERNAME"),
-        ///         password    = EnvironmentVariable("KUDU_CLIENT_PASSWORD");
-        ///
-        /// IKuduClient kuduClient = KuduClient(
-        ///     baseUri,
-        ///     userName,
-        ///     password);
-        ///
-        /// DirectoryPath sourceDirectoryPath       = "./Documentation/";
-        /// bool    skipPostDeploymentValidation    = false;
-        /// string  expectedValidateValue           = "1.0.0.0";
-        /// string  relativeValidateUrl             = $"/api/GetVersion?version={expectedValidateValue}";
+        /// git teUrl             = $"/api/GetVersion?version={expectedValidateValue}";
         ///
         /// FilePath deployFilePath = kuduClient.ZipRunFromDirectory(
         ///                                         sourceDirectoryPath,
@@ -430,7 +416,8 @@ namespace Cake.Kudu.Client.Extensions
                                     .CombineWithFilePath(FormattableString.Invariant($"{DateTime.UtcNow:yyyyMMdd_HHmmss}_{Guid.NewGuid():N}.zip"));
             var relativeDeployFilePath = deployFilePath.GetFilename().FullPath;
 
-            relativeValidateUrl = relativeValidateUrl ?? "KuduClientZipRunFromDirectoryVersion.txt";
+            const string kuduClientVersionFile = "KuduClientZipRunFromDirectoryVersion.txt";
+            relativeValidateUrl = relativeValidateUrl ?? kuduClientVersionFile;
             expectedValidateValue = expectedValidateValue ?? relativeDeployFilePath;
 
             client.ZipDirectoryToMemoryStream(
@@ -440,7 +427,7 @@ namespace Cake.Kudu.Client.Extensions
                     deployFilePath),
                 archive =>
                 {
-                    var entry = archive.CreateEntry(relativeValidateUrl, CompressionLevel.Optimal);
+                    var entry = archive.CreateEntry(kuduClientVersionFile, CompressionLevel.Optimal);
                     using (var entryStream = entry.Open())
                     {
                         using (var sw = new StreamWriter(entryStream, Encoding.ASCII))
