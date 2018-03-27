@@ -1,0 +1,6 @@
+{
+    "Method":  "PUT",
+    "Uri":  "/api/vfs/d\\:/home/data/SitePackages/(?<date>[0-9]*)_(?<time>[0-9]*)_(?<guid>[a-z0-9]*).zip",
+    "IsRegEx": true,
+    "ResponseStatusCode": 201
+}
