@@ -260,7 +260,7 @@ namespace Cake.Kudu.Client.Extensions
         }
 
         /// <summary>
-        /// Deploys zip stream Kudu +.
+        /// Deploys zip stream Kudu website.
         /// </summary>
         /// <param name="client">The Kudu client.</param>
         /// <param name="sourceStream">The source stream.</param>
