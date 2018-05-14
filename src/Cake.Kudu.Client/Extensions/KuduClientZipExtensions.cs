@@ -260,7 +260,7 @@ namespace Cake.Kudu.Client.Extensions
         }
 
         /// <summary>
-        /// Deploys zip stream Kudu website.
+        /// Deploys zip stream Kudu +.
         /// </summary>
         /// <param name="client">The Kudu client.</param>
         /// <param name="sourceStream">The source stream.</param>
@@ -449,7 +449,7 @@ namespace Cake.Kudu.Client.Extensions
             var commandResult = client.ExecuteCommand(
                 "powershell",
                 "site",
-                $"-Command \"$ProgressPreference = 'SilentlyContinue';Invoke-RestMethod https://%WEBSITE_HOSTNAME%/{relativeValidateUrl};exit $LastExitCode\"");
+                $"-Command \"$ProgressPreference = 'SilentlyContinue';Invoke-RestMethod https://$env:WEBSITE_HOSTNAME/{relativeValidateUrl};exit $LastExitCode\"");
 
             client.Log.Debug(
                 "Output:\r\n{0}\r\nError:\r\n{1}\r\nExitCode: {2}",
