@@ -402,6 +402,9 @@ namespace Cake.Kudu.Client.Extensions
         /// Information("Deployed to {0}", deployFilePath);
         /// </code>
         /// </example>
+        /// <remarks>
+        /// You app service needs to have the setting WEBSITE_RUN_FROM_ZIP set to 1 for Kudu to pickup your publish.
+        /// </remarks>
         public static FilePath ZipRunFromDirectory(
             this IKuduClient client,
             DirectoryPath localPath,
@@ -411,7 +414,7 @@ namespace Cake.Kudu.Client.Extensions
         {
             DirectoryPath sitePackagesPath = "d:/home/data/SitePackages";
             FilePath
-                siteVersionPath = sitePackagesPath.CombineWithFilePath("siteversion.txt"),
+                siteVersionPath = sitePackagesPath.CombineWithFilePath("packagename.txt"),
                 deployFilePath = sitePackagesPath
                                     .CombineWithFilePath(FormattableString.Invariant($"{DateTime.UtcNow:yyyyMMdd_HHmmss}_{Guid.NewGuid():N}.zip"));
             var relativeDeployFilePath = deployFilePath.GetFilename().FullPath;
