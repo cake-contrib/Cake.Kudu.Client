@@ -452,7 +452,7 @@ namespace Cake.Kudu.Client.Extensions
             var commandResult = client.ExecuteCommand(
                 "powershell",
                 "site",
-                $"-Command \"$ProgressPreference = 'SilentlyContinue';Invoke-RestMethod https://%WEBSITE_HOSTNAME%/{relativeValidateUrl};exit $LastExitCode\"");
+                $"-Command \"$ProgressPreference = 'SilentlyContinue';Invoke-RestMethod https://$env:WEBSITE_HOSTNAME/{relativeValidateUrl};exit $LastExitCode\"");
 
             client.Log.Debug(
                 "Output:\r\n{0}\r\nError:\r\n{1}\r\nExitCode: {2}",
