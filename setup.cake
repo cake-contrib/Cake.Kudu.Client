@@ -1,5 +1,5 @@
-#load nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Recipe&prerelease&version=0.3.0-unstable0350
-#addin nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Kudu.CLient&prerelease
+#load nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Recipe&prerelease
+#addin nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Kudu.Client&prerelease
 
 Environment.SetVariableNames();
 
@@ -12,7 +12,8 @@ BuildParameters.SetParameters(context: Context,
                             repositoryName: "Cake.Kudu.Client",
                             appVeyorAccountName: "cakecontrib",
                             shouldRunDupFinder: true,
-                            shouldRunInspectCode: true);
+                            shouldRunInspectCode: true,
+                            shouldRunGitVersion: true);
 
 BuildParameters.PrintParameters(Context);
 

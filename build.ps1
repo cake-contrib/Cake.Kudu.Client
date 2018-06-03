@@ -1,4 +1,4 @@
-$CakeVersion = "0.26.0"
+$CakeVersion = "0.26.1"
 $DotNetChannel = "LTS";
 $DotNetVersion = "2.1.4";
 $IsRunningOnUnix = [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Unix

@@ -1,0 +1,5 @@
+{
+    "Method":  "PUT",
+    "Uri":  "/api/vfs/d:/home/data/SitePackages/packagename.txt",
+    "ResponseStatusCode": 201
+}
