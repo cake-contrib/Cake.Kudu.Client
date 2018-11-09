@@ -48,12 +48,12 @@ public void RunTestTarget(string target)
     System.Environment.Exit(TestStatus.Failed);
 }
 
-public static CakeTaskBuilder<ActionTask> Test(this CakeTaskBuilder<ActionTask> builder, Action action)
+public static CakeTaskBuilder Test(this CakeTaskBuilder builder, Action action)
 {
     return builder.Test(ctx => action());
 }
 
-public static CakeTaskBuilder<ActionTask> Test(this CakeTaskBuilder<ActionTask> builder, Action<ICakeContext> action)
+public static CakeTaskBuilder Test(this CakeTaskBuilder builder, Action<ICakeContext> action)
 {
     return builder.Does(ctx =>
     {
