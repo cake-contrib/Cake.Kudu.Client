@@ -1,9 +1,9 @@
-$CakeVersion = "0.26.1"
+$CakeVersion = "0.30.0"
 $DotNetChannel = "LTS";
 $DotNetVersion = "2.1.4";
 $IsRunningOnUnix = [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Unix
 
-# temp addin fix 
+# temp addin fix
 $env:CAKE_SETTINGS_SKIPVERIFICATION='true'
 
 # Make sure tools folder exists
