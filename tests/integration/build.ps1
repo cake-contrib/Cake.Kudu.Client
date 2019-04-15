@@ -1,4 +1,4 @@
-$CakeVersion = "0.30.0"
+$CakeVersion = "0.33.0"
 $DotNetChannel = "LTS";
 $DotNetVersion = "2.1.4";
 $IsRunningOnUnix = [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Unix
@@ -169,9 +169,12 @@ else
     }
 }
 
-if ($LASTEXITCODE -eq 0)
-{
-    Write-Host "Testing Cake.Kudu.Client on .NET Core..."
-    & $DotNetCli "$CakeCoreCLRDLLPath" ./test_netstandard2.0.cake $args
-}
-exit $LASTEXITCODE
+[int] $result = $LASTEXITCODE
+
+
+Write-Host "Testing Cake.Kudu.Client on .NET Core..."
+& $DotNetCli "$CakeCoreCLRDLLPath" ./test_netstandard2.0.cake $args
+
+$result += $LASTEXITCODE;
+
+exit $result
