@@ -169,9 +169,12 @@ else
     }
 }
 
-if ($LASTEXITCODE -eq 0)
-{
-    Write-Host "Testing Cake.Kudu.Client on .NET Core..."
-    & $DotNetCli "$CakeCoreCLRDLLPath" ./test_netstandard2.0.cake $args
-}
-exit $LASTEXITCODE
+[int] $result = $LASTEXITCODE
+
+
+Write-Host "Testing Cake.Kudu.Client on .NET Core..."
+& $DotNetCli "$CakeCoreCLRDLLPath" ./test_netstandard2.0.cake $args
+
+$result += $LASTEXITCODE;
+
+exit $result
