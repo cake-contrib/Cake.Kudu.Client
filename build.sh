@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 # Define varibles
-CAKE_VERSION=0.25.0
+CAKE_VERSION=0.30.0
 DOTNET_SDK_VERSION=2.1.4
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 TOOLS_DIR=$SCRIPT_DIR/tools
 CAKE_EXE=$TOOLS_DIR/Cake.$CAKE_VERSION/Cake.exe
+
+# temp addin fix
+export CAKE_SETTINGS_SKIPVERIFICATION=true
 
 # Make sure the tools folder exist.
 if [ ! -d "$TOOLS_DIR" ]; then
@@ -20,7 +23,7 @@ if [ ! -d "$SCRIPT_DIR/.dotnet" ]; then
   mkdir "$SCRIPT_DIR/.dotnet"
 fi
 curl -Lsfo "$SCRIPT_DIR/.dotnet/dotnet-install.sh" https://raw.githubusercontent.com/dotnet/cli/v$DOTNET_SDK_VERSION/scripts/obtain/dotnet-install.sh
-sudo bash "$SCRIPT_DIR/.dotnet/dotnet-install.sh" --version $DOTNET_SDK_VERSION --install-dir .dotnet --no-path
+bash "$SCRIPT_DIR/.dotnet/dotnet-install.sh" --version $DOTNET_SDK_VERSION --install-dir .dotnet --no-path
 export PATH="$SCRIPT_DIR/.dotnet":$PATH
 export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
 export DOTNET_CLI_TELEMETRY_OPTOUT=1

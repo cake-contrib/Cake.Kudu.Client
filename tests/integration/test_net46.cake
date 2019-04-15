@@ -1,8 +1,0 @@
-#r "../../BuildArtifacts/temp/_PublishedLibraries/Cake.Kudu.Client/net46/Cake.Kudu.Client.dll"
-#load "utilities/TestRunner.cake"
-#load "utilities/TestServer.cake"
-#load "Cake.Kudu.Client.Tests/Extensions/KuduClientCommandExtensions.cake"
-#load "Cake.Kudu.Client.Tests/Extensions/KuduClientSettingsExtensions.cake"
-#load "Cake.Kudu.Client.Tests/Extensions/KuduClientVFSExtensions.cake"
-#load "Cake.Kudu.Client.Tests/Extensions/KuduClientZipExtensions.cake"
-#load "test.cake"

@@ -1,5 +1,5 @@
-#load nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Recipe&prerelease&version=0.3.0-unstable0350
-#addin nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Kudu.CLient&prerelease
+#load nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Recipe&prerelease&version=0.3.0-unstable0400
+#addin nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Kudu.Client&prerelease
 
 Environment.SetVariableNames();
 
@@ -11,8 +11,8 @@ BuildParameters.SetParameters(context: Context,
                             repositoryOwner: "cake-contrib",
                             repositoryName: "Cake.Kudu.Client",
                             appVeyorAccountName: "cakecontrib",
-                            shouldRunDupFinder: true,
-                            shouldRunInspectCode: true);
+                            shouldRunDupFinder: false,
+                            shouldRunInspectCode: false);
 
 BuildParameters.PrintParameters(Context);
 
@@ -22,7 +22,8 @@ ToolSettings.SetToolSettings(context: Context,
                                 BuildParameters.RootDirectoryPath + "/src/Cake.Kudu.Client/LitJson/**/*.cs" });
 
 
-BuildParameters.Tasks.DotNetCoreBuildTask.Task.Actions.Clear();
+((CakeTask)BuildParameters.Tasks.DotNetCoreBuildTask.Task).Actions.Clear();
+
 BuildParameters.Tasks.DotNetCoreBuildTask.Does(() => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
@@ -115,5 +116,10 @@ Task("Docs-Kudu-Publish")
 BuildParameters.Tasks.DeployGraphDocumentation.IsDependentOn("Docs-Kudu-Publish");
 BuildParameters.Tasks.DeployGraphDocumentation.WithCriteria(() => false);
 BuildParameters.Tasks.PublishDocumentationTask.WithCriteria(() => false);
+
+// disable unused tasks
+BuildParameters.Tasks.InstallReportGeneratorTask.WithCriteria(() => false);
+BuildParameters.Tasks.InstallOpenCoverTask.WithCriteria(() => false);
+BuildParameters.Tasks.DotNetCoreTestTask.WithCriteria(() => false);
 
 Build.RunDotNetCore();

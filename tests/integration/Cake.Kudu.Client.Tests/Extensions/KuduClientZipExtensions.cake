@@ -88,3 +88,22 @@ Task("Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipDeployDirectory")
     // When
     kuduClient.ZipDeployDirectory(localPath);
 });
+
+Task("Cake.Kudu.Client.Extensions.KuduClientZipExtensions.ZipRunFromDirectory")
+    .Test( ()=>
+{
+    // Given
+    DirectoryPath localPath = "/testfolder/";
+    bool skipPostDeploymentValidation = false;
+    string  relativeValidateUrl = "/CustomVersion.txt",
+            expectedValidateValue = @"deployments
+locks
+wwwroot";
+
+    // When
+    kuduClient.ZipRunFromDirectory(
+        localPath,
+        skipPostDeploymentValidation,
+        relativeValidateUrl,
+        expectedValidateValue);
+});

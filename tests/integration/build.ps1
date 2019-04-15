@@ -1,7 +1,10 @@
-$CakeVersion = "0.25.0"
+$CakeVersion = "0.33.0"
 $DotNetChannel = "LTS";
-$DotNetVersion = "1.1.7";
+$DotNetVersion = "2.1.4";
 $IsRunningOnUnix = [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Unix
+
+# temp addin fix
+$env:CAKE_SETTINGS_SKIPVERIFICATION='true'
 
 # Make sure tools folder exists
 $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
@@ -150,26 +153,28 @@ if ($LASTEXITCODE -ne 0)
 if ($IsRunningOnUnix)
 {
     Write-Host "Testing Cake.Kudu.Client on Mono..."
-    & mono "$CakeExePath" ./test_net46.cake --bootstrap
+    & mono "$CakeExePath" ./test_net461.cake --bootstrap
     if ($LASTEXITCODE -eq 0)
     {
-        & mono "$CakeExePath" ./test_net46.cake $args
+        & mono "$CakeExePath" ./test_net461.cake $args
     }
 }
 else
 {
     Write-Host "Testing Cake.Kudu.Client on .NET Framework..."
-    & "$CakeExePath" ./setup.cake $args
-    & "$CakeExePath"  ./test_net46.cake --bootstrap
+    & "$CakeExePath"  ./test_net461.cake --bootstrap
     if ($LASTEXITCODE -eq 0)
     {
-        & "$CakeExePath" ./test_net46.cake $args
+        & "$CakeExePath" ./test_net461.cake $args
     }
 }
 
-if ($LASTEXITCODE -eq 0)
-{
-    Write-Host "Testing Cake.Kudu.Client on .NET Core..."
-    & $DotNetCli "$CakeCoreCLRDLLPath" ./test_netstandard1.6.cake $args
-}
-exit $LASTEXITCODE
+[int] $result = $LASTEXITCODE
+
+
+Write-Host "Testing Cake.Kudu.Client on .NET Core..."
+& $DotNetCli "$CakeCoreCLRDLLPath" ./test_netstandard2.0.cake $args
+
+$result += $LASTEXITCODE;
+
+exit $result

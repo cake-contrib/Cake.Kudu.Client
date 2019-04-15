@@ -1,7 +1,7 @@
 #addin nuget:?package=LitJson&version=0.12.0
-#addin nuget:?package=Microsoft.AspNetCore.TestHost&version=1.1.3&loaddependencies=true
-#addin nuget:?package=Microsoft.AspNetCore.Http.Extensions&version=1.1.2
-#addin nuget:?package=Cake.Testing&version=0.25.0
+#addin nuget:?package=Microsoft.AspNetCore.TestHost&version=2.0.0&loaddependencies=true
+#addin nuget:?package=Microsoft.AspNetCore.Http.Extensions&version=2.0.0
+#addin nuget:?package=Cake.Testing&version=0.26.0
 using System.Net.Http;
 using System.Threading.Tasks;
 using Cake.Testing;
@@ -25,7 +25,8 @@ public class KuduTestServer : IStartup
         FakeFileSystem = new FakeFileSystem(Context.Environment);
         TestServer = new TestServer(new WebHostBuilder()
                                     .ConfigureServices(services =>
-                                        services.AddSingleton<IStartup>(this)));
+                                        services.AddSingleton<IStartup>(this))
+                                    .UseSetting(WebHostDefaults.ApplicationKey, "TestServer"));
     }
 
     private FakeFileSystem FakeFileSystem { get; }
@@ -66,9 +67,10 @@ public class KuduTestServer : IStartup
                   kuduResponse = memoryStream.ToArray();
                 }
 
-                Context.Verbose("KuduTestServer Adding route: {0} ({1})",
+                Context.Verbose("KuduTestServer Adding route: {0} (Method: {1}, IsRegEx: {2})",
                     kuduRequest.Uri,
-                    kuduRequest.Method
+                    kuduRequest.Method,
+                    kuduRequest.IsRegEx
                     );
 
 
@@ -80,12 +82,18 @@ public class KuduTestServer : IStartup
                             url,
                             context.Request.Method);
 
-                        if (!StringComparer.OrdinalIgnoreCase.Equals(url, kuduRequest.Uri)
+                        var isUrlMatch = (
+                                            kuduRequest.IsRegEx &&
+                                            System.Text.RegularExpressions.Regex.IsMatch(url, kuduRequest.Uri)
+                                         )
+                                         || StringComparer.OrdinalIgnoreCase.Equals(url, kuduRequest.Uri);
+
+                        if (!isUrlMatch
                             || !StringComparer.OrdinalIgnoreCase.Equals(context.Request.Method, kuduRequest.Method))
                         {
-                            Context.Verbose("KuduTestServer no match: {0}:{1} ({2}:{3})",
+                            Context.Verbose("KuduTestServer no match: {0}:{1} ({3}, {2})",
                                 kuduRequest.Uri,
-                                StringComparer.OrdinalIgnoreCase.Equals(url, kuduRequest.Uri),
+                                isUrlMatch ? "Regex" : "Equals",
                                 kuduRequest.Method,
                                 StringComparer.OrdinalIgnoreCase.Equals(context.Request.Method, kuduRequest.Method)
                             );
@@ -116,6 +124,7 @@ public class KuduRequest
 {
     public string Method { get; set; }
     public string Uri { get; set; }
+    public bool IsRegEx { get; set;}
     public string ResponseContentType { get; set; }
     public int? ResponseStatusCode { get; set; }
 }
