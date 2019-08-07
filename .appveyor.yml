@@ -10,4 +10,4 @@ test: off
 deploy: off
 
 cache:
-- tools -> setup.cake
+- tools -> recipe.cake
