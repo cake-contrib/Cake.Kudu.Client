@@ -137,11 +137,11 @@ if ($LASTEXITCODE -ne 0)
 Write-Host "Codegen test dependencies..."
 if ($IsRunningOnUnix)
 {
-    & mono "$CakeExePath" ./setup.cake $args
+    & mono "$CakeExePath" ./recipe.cake $args
 }
 else
 {
-    & "$CakeExePath" ./setup.cake $args
+    & "$CakeExePath" ./recipe.cake $args
 }
 
 if ($LASTEXITCODE -ne 0)
