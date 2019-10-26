@@ -13,7 +13,7 @@ BuildParameters.SetParameters(context: Context,
                             appVeyorAccountName: "cakecontrib",
                             shouldRunDupFinder: false,
                             shouldRunInspectCode: false,
-                            shouldRunGitVersion: true);
+                            shouldRunGitVersion: !Bitrise.IsRunningOnBitrise);
 
 BuildParameters.PrintParameters(Context);
 

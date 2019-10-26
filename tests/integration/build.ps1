@@ -5,6 +5,7 @@ $IsRunningOnUnix = [System.Environment]::OSVersion.Platform -eq [System.Platform
 
 # temp addin fix
 $env:CAKE_SETTINGS_SKIPVERIFICATION='true'
+$env:CAKE_SETTINGS_SKIPPACKAGEVERSIONCHECK='true'
 
 # Make sure tools folder exists
 $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
