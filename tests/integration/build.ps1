@@ -123,7 +123,7 @@ if (!(Test-Path $CakeCoreCLRDLLPath)) {
 Push-Location
 Write-Host "Building Cake.Kudu.Client..."
 Resolve-Path "$PSScriptRoot/../../" | Set-Location
-./build.ps1
+./build.ps1 $args
 Pop-Location
 
 if ($LASTEXITCODE -ne 0)
