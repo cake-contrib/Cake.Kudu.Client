@@ -1,10 +1,11 @@
-$CakeVersion = "0.33.0"
+$CakeVersion = "1.0.0"
 $DotNetChannel = "LTS";
-$DotNetVersion = "2.1.4";
+$DotNetVersion = "5.0.102";
 $IsRunningOnUnix = [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Unix
 
 # temp addin fix
 $env:CAKE_SETTINGS_SKIPVERIFICATION='true'
+$env:CAKE_SETTINGS_SKIPPACKAGEVERSIONCHECK='true'
 
 # Make sure tools folder exists
 $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
