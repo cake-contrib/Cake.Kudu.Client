@@ -1,6 +1,6 @@
-$CakeVersion = "0.35.0"
+$CakeVersion = "1.0.0"
 $DotNetChannel = "LTS";
-$DotNetVersion = "2.1.4";
+$DotNetVersion = "5.0.102";
 $IsRunningOnUnix = [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Unix
 
 # temp addin fix
