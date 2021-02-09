@@ -1,4 +1,4 @@
-#load nuget:?package=Cake.Recipe&version=1.0.0
+#load nuget:?package=Cake.Recipe&version=1.1.2
 #addin nuget:https://www.myget.org/F/cake-contrib/api/v2?package=Cake.Kudu.Client&prerelease
 
 Environment.SetVariableNames();
