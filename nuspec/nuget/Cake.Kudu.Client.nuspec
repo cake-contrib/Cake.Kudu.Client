@@ -13,7 +13,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.jsdelivr.net/gh/cake-contrib/graphics/png/cake-contrib-medium.png</iconUrl>
     <copyright>Copyright (c) WCOM AB</copyright>
-    <tags>Cake, Script, Build, Kudu</tags>
+    <tags>Cake, Script, Build, Kudu, Azure, cake-addin</tags>
   </metadata>
   <files>
     <file src="net461\Cake.Kudu.Client.dll" target="lib/net461" />
