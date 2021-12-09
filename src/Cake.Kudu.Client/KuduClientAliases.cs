@@ -16,7 +16,7 @@ namespace Cake.Kudu.Client
     public static class KuduClientAliases
     {
         /// <summary>
-        ///  Get a Kudu client using supplied
+        ///  Get a Kudu client using supplied.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="baseUri">The base uri for site Kudu environment.</param>
