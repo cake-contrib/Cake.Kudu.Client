@@ -1,6 +1,7 @@
 var targets = new [] {
-    "net461",
-    "netstandard2.0"
+    "netcoreapp3.1",
+    "net5.0",
+    "net6.0"
 };
 
 DirectoryPath rootPath = MakeAbsolute(Directory("./"));
