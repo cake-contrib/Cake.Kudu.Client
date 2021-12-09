@@ -51,11 +51,11 @@ namespace Cake.Kudu.Client.Extensions
         }
 
         /// <summary>
-        /// Downloads remote direactory as zip to stream.
+        /// Downloads remote directory as zip to stream.
         /// </summary>
         /// <param name="client">The Kudu client.</param>
         /// <param name="remotePath">The remote source path.</param>
-        /// <returns>Content as <see cref="Stream"/></returns>
+        /// <returns>Content as <see cref="Stream"/>.</returns>
         /// <example>
         /// <code>
         /// #addin nuget:?package=Cake.Kudu.Client
@@ -309,7 +309,7 @@ namespace Cake.Kudu.Client.Extensions
         }
 
         /// <summary>
-        /// Deploy local directory to KuduWebsite
+        /// Deploy local directory to KuduWebsite.
         /// </summary>
         /// <param name="client">The Kudu client.</param>
         /// <param name="localPath">The local directory path.</param>
@@ -346,7 +346,7 @@ namespace Cake.Kudu.Client.Extensions
         }
 
         /// <summary>
-        /// Deploy local directory to KuduWebsite as read only Zip file system
+        /// Deploy local directory to KuduWebsite as read only Zip file system.
         /// </summary>
         /// <param name="client">The Kudu client.</param>
         /// <param name="localPath">The local directory path.</param>
@@ -381,7 +381,7 @@ namespace Cake.Kudu.Client.Extensions
         }
 
         /// <summary>
-        /// Deploy local directory to KuduWebsite as read only Zip file system
+        /// Deploy local directory to KuduWebsite as read only Zip file system.
         /// </summary>
         /// <param name="client">The Kudu client.</param>
         /// <param name="localPath">The local directory path.</param>

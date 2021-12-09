@@ -21,7 +21,7 @@ namespace Cake.Kudu.Client.Extensions
         /// <param name="command">The command to execute.</param>
         /// <param name="directory">The remote directory to execute command in.</param>
         /// <param name="arguments">The arguments.</param>
-        /// <returns><see ref="KuduCommandResult"/></returns>
+        /// <returns><see ref="KuduCommandResult"/>.</returns>
         /// <example>
         /// <code>
         /// #addin nuget:?package=Cake.Kudu.Client
