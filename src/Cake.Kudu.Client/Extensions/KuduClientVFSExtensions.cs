@@ -134,11 +134,11 @@ namespace Cake.Kudu.Client.Extensions
         }
 
         /// <summary>
-        /// Downloads remote file to stream
+        /// Downloads remote file to stream.
         /// </summary>
         /// <param name="client">The Kudu client.</param>
         /// <param name="remotePath">The remote source path.</param>
-        /// <returns>Content as <see cref="Stream"/></returns>
+        /// <returns>Content as <see cref="Stream"/>.</returns>
         /// <example>
         /// <code>
         /// #addin nuget:?package=Cake.Kudu.Client

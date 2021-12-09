@@ -26,12 +26,14 @@ namespace Cake.Kudu.Client
             Password = !string.IsNullOrWhiteSpace(password) ? password : throw new ArgumentNullException(nameof(password));
         }
 
+#pragma warning disable SA1629
         /// <summary>
-        /// Gets the base uri for site Kudu environment
+        /// Gets the base uri for site Kudu environment.
         /// </summary>
         /// <example>
         /// https://yoursite.scm.azurewebsites.net
         /// </example>
+#pragma warning restore SA1629
         public string BaseUri { get; }
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace Cake.Kudu.Client
         public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(300);
 
         /// <summary>
-        /// Gets or sets the delegate for customizing the HttpClient used for API options
+        /// Gets or sets the delegate for customizing the HttpClient used for API options.
         /// </summary>
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public Func<KuduClientSettings, System.Net.Http.HttpClient, System.Net.Http.HttpClient> HttpClientCustomization { get; set; }
